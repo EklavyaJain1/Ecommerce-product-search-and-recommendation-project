@@ -26,6 +26,7 @@ the standard library.
 - [Design system](#design-system)
 - [Verified behaviour](#verified-behaviour)
 - [Limitations](#limitations)
+- [Licensing](#licensing)
 - [Possible next steps](#possible-next-steps)
 
 ---
@@ -69,8 +70,9 @@ bounded heap; every sort control is a stable merge sort.
 ### Engine
 
 - Prefix-trie autocomplete with weighted, popularity-ranked completions
-- BM25-scored inverted-index search over weighted fields (name ×3, brand/type/category ×2,
-  tags ×2, description ×1)
+- BM25-scored inverted-index search over weighted fields — the name is doubled at
+  weight 3 (a 6× term-frequency boost), brand/type/category at weight 2, tags at
+  weight 2, and the description at weight 1
 - Trie-backed prefix expansion so partial words match (`head → headphones`,
   `espres → espresso`, `cast ir → iron`), scored at half weight so exact matches rank first
 - Bounded-heap top-K selection for results and trending
@@ -377,6 +379,14 @@ Stated plainly, since this is a demonstration project:
   represented by the designed icon system described above.
 - **Template caching.** Flask caches templates when `debug=False`; restart the server after
   editing `templates/index.html`.
+
+---
+
+## Licensing
+
+No license file is included, which means the default of all rights reserved applies.
+Pick a license before distributing or accepting contributions — MIT and Apache-2.0 are
+common choices for a project like this — and add it as `LICENSE` at the repository root.
 
 ---
 
