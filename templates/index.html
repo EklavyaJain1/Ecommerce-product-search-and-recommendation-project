@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>ShopMind — Everyday Goods, Thoughtfully Chosen</title>
+<meta name="description" content="Six departments, 126 products. Search, filter and get recommendations from a storefront served by a Python search engine.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="/static/style.css?v=6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E4B3C'/%3E%3Cpath d='M9 21.5V10.5h7a5.5 5.5 0 010 11H9' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<p class="announce">Free shipping over $75 · 30-day returns · Demo store, no orders are placed</p>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7h17M3.5 12h17M3.5 17h17"/></svg>
+    </button>
+
+    <a class="logo" href="/" aria-label="ShopMind home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M9 21.5V10.5h7a5.5 5.5 0 010 11H9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="logo-text">ShopMind</span>
+    </a>
+
+    <form class="search" id="searchForm" role="search">
+      <label class="sr-only" for="searchInput">Search products</label>
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+      <input id="searchInput" type="search" name="q" placeholder="Search headphones, cookware, books…" autocomplete="off" spellcheck="false" enterkeyhint="search">
+      <kbd class="kbd" aria-hidden="true">/</kbd>
+      <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" hidden>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="search-results" id="searchResults" hidden></div>
+    </form>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <button class="nav-link" type="button" data-quick="all">Shop All</button>
+      <button class="nav-link" type="button" data-quick="new">New Arrivals</button>
+      <button class="nav-link" type="button" data-quick="best">Best Sellers</button>
+      <button class="nav-link" type="button" data-quick="under50">Under $50</button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="engineButtonTop" type="button" aria-label="How search works">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3 1.8"/></svg>
+      </button>
+      <button class="cart-btn" id="cartButton" type="button" aria-label="Open cart">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 8.5V7a4.5 4.5 0 019 0v1.5"/><path d="M4.5 8.5h15l-1 11.5h-13z"/></svg>
+        <span class="cart-count" id="cartCount" aria-hidden="true">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobileNav" hidden>
+    <button class="nav-link" type="button" data-quick="all">Shop All</button>
+    <button class="nav-link" type="button" data-quick="new">New Arrivals</button>
+    <button class="nav-link" type="button" data-quick="best">Best Sellers</button>
+    <button class="nav-link" type="button" data-quick="under50">Under $50</button>
+    <button class="nav-link quiet" type="button" data-engine>How Search Works</button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Six departments · 126 products</p>
+        <h1 class="display">Everyday goods,<br><em>chosen with care.</em></h1>
+        <p class="hero-sub">Audio, apparel, cookware, beauty, outdoor gear and books — with suggestions that appear as you type and recommendations built from what you look at.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" type="button" data-quick="all">Shop All Products</button>
+          <button class="btn btn-outline" type="button" data-quick="new">See New Arrivals</button>
+        </div>
+        <dl class="hero-facts">
+          <div><dt>Products</dt><dd id="factProducts">—</dd></div>
+          <div><dt>Departments</dt><dd id="factDepts">—</dd></div>
+          <div><dt>Last Search</dt><dd id="factLatency">—</dd></div>
+        </dl>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <figure class="art-tile art-a">
+          <svg viewBox="0 0 32 32"><path d="M5 18v-4a11 11 0 0122 0v4"/><rect x="3" y="17" width="5.5" height="9.5" rx="2.75"/><rect x="23.5" y="17" width="5.5" height="9.5" rx="2.75"/></svg>
+        </figure>
+        <figure class="art-tile art-b">
+          <svg viewBox="0 0 32 32"><circle cx="13.5" cy="18.5" r="9.5"/><path d="M22.5 13.5l6.5-4"/></svg>
+        </figure>
+        <figure class="art-tile art-c">
+          <svg viewBox="0 0 32 32"><path d="M4 20.5h24.5v4.5H4z"/><path d="M4 20.5l2.5-6.5h4l2-3h4l2.5 4c3 .6 6.5 2 8 5.5"/></svg>
+        </figure>
+        <figcaption class="art-caption">Fig. 01 — 126 products, 55 product types</figcaption>
+      </div>
+    </div>
+  </section>
+
+  <section class="departments" aria-labelledby="deptsTitle">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="deptsTitle">Shop by Department</h2>
+        <p class="section-sub">Six collections, each with its own filter and sort.</p>
+      </div>
+      <div class="dept-grid" id="deptGrid"></div>
+    </div>
+  </section>
+
+  <section class="trust" aria-label="Store services">
+    <div class="wrap trust-row">
+      <div class="trust-item">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/></svg>
+        <div><h3>Free Shipping Over $75</h3><p>Applies across every department.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 108-8H8"/><path d="M8 1.5L5 4l3 2.5"/></svg>
+        <div><h3>30-Day Returns</h3><p>Unused items, original packaging.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/></svg>
+        <div><h3>Secure Checkout</h3><p>Card details never leave your device.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6.5h15v9h-15zM9 19.5h6M12 15.5v4"/></svg>
+        <div><h3>Support Seven Days</h3><p>Replies within one business day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog" id="catalog" aria-labelledby="catalogTitle">
+    <div class="wrap catalog-grid">
+
+      <aside class="filters" id="filtersPanel" aria-label="Product filters">
+        <div class="filters-head">
+          <h2>Filters</h2>
+          <button class="link-btn" id="clearFilters" type="button">Clear All</button>
+        </div>
+
+        <fieldset class="filter-group">
+          <legend>Department</legend>
+          <div class="check-list" id="filterDepts"></div>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Price</legend>
+          <div class="price-inputs">
+            <label class="sr-only" for="priceMin">Minimum price</label>
+            <input id="priceMin" type="number" name="min_price" inputmode="decimal" min="0" step="1" placeholder="Min" autocomplete="off">
+            <span class="price-dash" aria-hidden="true">–</span>
+            <label class="sr-only" for="priceMax">Maximum price</label>
+            <input id="priceMax" type="number" name="max_price" inputmode="decimal" min="0" step="1" placeholder="Max" autocomplete="off">
+          </div>
+          <label class="sr-only" for="priceRange">Maximum price</label>
+          <input id="priceRange" class="range" type="range" min="0" max="450" step="5" value="450">
+          <p class="range-note" id="rangeNote">Up to $450</p>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Rating</legend>
+          <div class="check-list" id="filterRating"></div>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Availability</legend>
+          <label class="check">
+            <input type="checkbox" id="inStockToggle" name="in_stock">
+            <span>In stock only</span>
+          </label>
+        </fieldset>
+
+        <button class="btn btn-primary btn-block filters-apply" id="filtersApply" type="button">Show Results</button>
+      </aside>
+
+      <div class="catalog-main">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <h2 id="catalogTitle">All Products</h2>
+            <p class="result-count" id="resultCount" role="status" aria-live="polite">Loading…</p>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-outline filters-toggle" id="filtersToggle" type="button" aria-expanded="false" aria-controls="filtersPanel">Filters</button>
+            <label class="sort">
+              <span class="sr-only">Sort products</span>
+              <select id="sortSelect" name="sort">
+                <option value="trending">Featured</option>
+                <option value="newest">Newest</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="relevance">Relevance</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <p class="query-note" id="queryNote" hidden></p>
+
+        <div class="product-grid" id="grid"></div>
+
+        <div class="empty" id="empty" hidden>
+          <h3>No products match these filters</h3>
+          <p id="emptyNote">Try removing a department or raising the price limit.</p>
+          <button class="btn btn-outline" type="button" id="emptyReset">Clear All Filters</button>
+        </div>
+
+        <div class="load-more-wrap" id="loadMoreWrap" hidden>
+          <button class="btn btn-outline" id="loadMore" type="button">Load More</button>
+          <p class="load-note" id="loadNote"></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="rail" id="recoSection" hidden aria-labelledby="recoTitle">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="recoTitle">Recommended For You</h2>
+        <p class="section-sub" id="recoSub">Built from the products you open.</p>
+      </div>
+      <div class="rail-track" id="recoRail"></div>
+    </div>
+  </section>
+
+  <section class="rail" aria-labelledby="trendTitle">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="trendTitle">Trending This Week</h2>
+        <p class="section-sub">Ranked by rating, review volume and how recently the product arrived.</p>
+      </div>
+      <div class="rail-track" id="trendingRail"></div>
+    </div>
+  </section>
+
+  <section class="newsletter" aria-labelledby="newsTitle">
+    <div class="wrap newsletter-inner">
+      <div>
+        <h2 id="newsTitle">New arrivals, once a week</h2>
+        <p>One email every Thursday. Unsubscribe any time.</p>
+      </div>
+      <form class="newsletter-form" id="newsletterForm">
+        <label class="sr-only" for="newsletterEmail">Email address</label>
+        <input id="newsletterEmail" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="/" aria-label="ShopMind home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M9 21.5V10.5h7a5.5 5.5 0 010 11H9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="logo-text">ShopMind</span>
+      </a>
+      <p>A demonstration storefront. The 126-product catalogue is generated sample data and no payments are processed.</p>
+    </div>
+    <nav aria-labelledby="footShop">
+      <h3 id="footShop">Shop</h3>
+      <ul>
+        <li><button class="footer-link" type="button" data-quick="all">All Products</button></li>
+        <li><button class="footer-link" type="button" data-quick="new">New Arrivals</button></li>
+        <li><button class="footer-link" type="button" data-quick="best">Best Sellers</button></li>
+        <li><button class="footer-link" type="button" data-quick="under50">Under $50</button></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="footHelp">
+      <h3 id="footHelp">Help</h3>
+      <ul>
+        <li><button class="footer-link" type="button" data-info="shipping">Shipping &amp; Delivery</button></li>
+        <li><button class="footer-link" type="button" data-info="returns">Returns &amp; Refunds</button></li>
+        <li><button class="footer-link" type="button" data-info="contact">Contact Support</button></li>
+        <li><button class="footer-link" type="button" data-info="faq">FAQ</button></li>
+      </ul>
+    </nav>
+    <nav aria-labelledby="footEngine">
+      <h3 id="footEngine">Store Engine</h3>
+      <ul>
+        <li><button class="footer-link" type="button" data-engine>How Search Works</button></li>
+        <li><button class="footer-link" type="button" data-engine>Recommendation Model</button></li>
+        <li><button class="footer-link" type="button" data-engine>Data Structures In Use</button></li>
+        <li><a class="footer-link" href="/api/facets" target="_blank" rel="noopener">Catalog API</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer-bottom">
+    <p>© <span id="year">2026</span> ShopMind · Demo catalogue, sample data.</p>
+    <ul class="pay-list" aria-label="Accepted payment methods">
+      <li>VISA</li><li>Mastercard</li><li>Amex</li><li>PayPal</li>
+    </ul>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" hidden>
+  <header class="panel-head">
+    <h2 id="cartTitle">Your Cart <span class="count-pill" id="cartTitleCount">0</span></h2>
+    <button class="icon-btn" id="closeCart" type="button" aria-label="Close cart">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+  <div class="panel-body">
+    <div class="cart-empty" id="cartEmpty">
+      <p>Your cart is empty.</p>
+      <button class="btn btn-outline" type="button" id="cartBrowse">Browse Products</button>
+    </div>
+    <ul class="cart-items" id="cartItems"></ul>
+  </div>
+  <footer class="panel-foot" id="cartFoot" hidden>
+    <div class="cart-line"><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div>
+    <p class="cart-note" id="cartShipNote"></p>
+    <button class="btn btn-primary btn-block" id="checkoutButton" type="button">Checkout</button>
+    <p class="cart-fine">Demo store — no payment is processed and no order is placed.</p>
+  </footer>
+</aside>
+
+<div class="modal" id="quickview" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
+    <h2 class="sr-only" id="qvTitle">Product details</h2>
+    <button class="icon-btn modal-close" id="closeQuickview" type="button" aria-label="Close product details">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="modal-body" id="quickviewBody"></div>
+  </div>
+</div>
+
+<aside class="panel" id="enginePanel" role="dialog" aria-modal="true" aria-labelledby="engineTitle" hidden>
+  <header class="panel-head">
+    <h2 id="engineTitle">How Search Works</h2>
+    <button class="icon-btn" id="closeEngine" type="button" aria-label="Close search details">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+  <div class="panel-body" id="engineBody"></div>
+</aside>
+
+<p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+<noscript>
+  <div class="wrap noscript">This storefront needs JavaScript to search and filter the catalogue.</div>
+</noscript>
+
+<script src="/static/icons.js?v=6"></script>
+<script src="/static/app.js?v=6"></script>
+</body>
+</html>
