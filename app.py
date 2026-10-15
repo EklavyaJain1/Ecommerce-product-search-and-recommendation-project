@@ -11,6 +11,7 @@ Endpoints
 """
 from __future__ import annotations
 
+import math
 import time
 from pathlib import Path
 
@@ -94,15 +95,32 @@ def apply_facets(items, cats, pmin, pmax, rating_min, in_stock):
     return items
 
 
+def to_float(value, default=None):
+    """Parse a query-string number, tolerating junk and non-finite values."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return default
+    return number if math.isfinite(number) else default
+
+
+def to_int(value, default=0):
+    """Parse a query-string integer, falling back instead of raising."""
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return default
+
+
 def parse_common(args):
     cats = [c for c in (args.get("category") or "").split(",") if c]
-    pmin = float(args["min_price"]) if args.get("min_price") else None
-    pmax = float(args["max_price"]) if args.get("max_price") else None
-    rating_min = float(args.get("min_rating") or 0)
+    pmin = to_float(args.get("min_price"))
+    pmax = to_float(args.get("max_price"))
+    rating_min = to_float(args.get("min_rating"), 0.0) or 0.0
     in_stock = args.get("in_stock") == "1"
-    sort = args.get("sort", "relevance")
-    page = max(int(args.get("page", 1)), 1)
-    per_page = min(max(int(args.get("per_page", 24)), 6), 60)
+    sort = args.get("sort") or "relevance"
+    page = max(to_int(args.get("page"), 1), 1)
+    per_page = min(max(to_int(args.get("per_page"), 24), 6), 60)
     return cats, pmin, pmax, rating_min, in_stock, sort, page, per_page
 
 
@@ -195,8 +213,8 @@ def api_product(pid: int):
 @app.get("/api/recommend")
 def api_recommend():
     t0 = time.perf_counter()
-    viewed = [int(x) for x in (request.args.get("viewed") or "").split(",") if x.strip().isdigit()]
-    k = min(max(int(request.args.get("k", 8)), 3), 16)
+    viewed = [int(x) for x in (request.args.get("viewed") or "").split(",") if x.strip().isdigit()][:40]
+    k = min(max(to_int(request.args.get("k"), 8), 3), 16)
     results, strategy = reco.recommend(viewed, k=k)
     items = [
         {"score": s, "product": p, "reason": r}

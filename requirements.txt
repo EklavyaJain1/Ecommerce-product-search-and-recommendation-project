@@ -1,0 +1,4 @@
+# ShopMind runtime dependencies.
+# The storefront and the DSA engine are pure standard library otherwise —
+# Flask is the only third-party package the project needs.
+Flask>=3.0,<4.0

@@ -236,6 +236,7 @@ $ curl "http://127.0.0.1:5000/api/facets"
 │   ├── style.css               Design tokens and components
 │   ├── icons.js                Duotone product illustration set + department tints
 │   └── app.js                  Storefront logic (search, cart, quickview, URL state)
+├── requirements.txt            Runtime dependency pin (Flask)
 ├── README.md
 └── .gitignore
 ```
@@ -244,11 +245,11 @@ $ curl "http://127.0.0.1:5000/api/facets"
 
 ## Getting started
 
-**Requirements:** Python 3.9+ (developed on 3.12) and Flask. Nothing else.
+**Requirements:** Python 3.9+ (developed on 3.12) and Flask, pinned in [`requirements.txt`](requirements.txt). Nothing else.
 
 ```bash
 # 1. Install the single dependency
-pip install flask
+pip install -r requirements.txt
 
 # 2. (Optional) regenerate the catalogue — deterministic, same output every run
 python data/seed.py
@@ -265,7 +266,7 @@ Then open **http://127.0.0.1:5000**.
 ```bash
 python -m venv .venv
 source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install flask
+pip install -r requirements.txt
 python app.py
 ```
 
