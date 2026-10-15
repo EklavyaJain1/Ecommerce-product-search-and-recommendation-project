@@ -33,6 +33,20 @@ import json
 PRODUCTS = json.loads((BASE / "data" / "products.json").read_text(encoding="utf-8"))
 BY_ID = {p["id"]: p for p in PRODUCTS}
 
+# Optional product photography. Every file listed in the manifest is CC0, Public
+# Domain or CC BY, with its provenance recorded in CREDITS.md. Product types with
+# no entry keep the built-in duotone illustration, so partial coverage degrades
+# gracefully rather than showing a broken image.
+_IMAGE_MANIFEST = BASE / "data" / "product-images.json"
+_IMAGE_FILES = {}
+if _IMAGE_MANIFEST.exists():
+    _IMAGE_FILES = {
+        ptype: entry["file"]
+        for ptype, entry in json.loads(_IMAGE_MANIFEST.read_text(encoding="utf-8")).items()
+    }
+for _product in PRODUCTS:
+    _product["image"] = _IMAGE_FILES.get(_product["type"])
+
 index = InvertedIndex()
 trie = Trie()
 for p in PRODUCTS:

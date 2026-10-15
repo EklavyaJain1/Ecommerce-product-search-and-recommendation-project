@@ -71,6 +71,14 @@ function badgesHTML(p) {
   return out.length ? `<ul class="badges">${out.join("")}</ul>` : "";
 }
 
+/* One photo per product type where the catalogue has an openly-licensed image
+   for it; otherwise the built-in duotone illustration stands in. Cards keep the
+   image decorative because the product name sits directly beneath it. */
+function productImage(p, alt = "") {
+  if (!p.image) return "";
+  return `<img class="product-img" src="/static/${esc(p.image)}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+}
+
 function cardHTML(p, index) {
   const dept = deptStyle(p.category);
   const icon = iconKeyFor(p);
@@ -80,7 +88,7 @@ function cardHTML(p, index) {
   return `
   <article class="card">
     <div class="thumb" style="--tint:${dept.tint};--tint-ink:${dept.ink}">
-      ${iconSvg(icon, "thumb-icon")}
+      ${p.image ? productImage(p) : iconSvg(icon, "thumb-icon")}
       ${badgesHTML(p)}
       <button class="quick-add" type="button" data-add="${p.id}" ${soldOut ? "disabled" : ""}>
         ${soldOut ? "Sold Out" : "Add to Cart"}
@@ -503,12 +511,16 @@ async function openProduct(id, { push = true } = {}) {
   $("#quickviewBody").innerHTML = `
     <div class="qv-grid">
       <div class="qv-gallery">
-        <div class="qv-main" style="--tint:${dept.tint};--tint-ink:${dept.ink}">${iconSvg(iconKeyFor(p))}</div>
-        <div class="qv-thumbs" role="group" aria-label="Product image options">
+        <div class="qv-main" style="--tint:${dept.tint};--tint-ink:${dept.ink}">${p.image ? productImage(p, p.name) : iconSvg(iconKeyFor(p))}</div>
+        ${
+          p.image
+            ? ""
+            : `<div class="qv-thumbs" role="group" aria-label="Product image options">
           <button class="qv-thumb" type="button" aria-label="View on white" style="--tint-ink:${dept.ink}"><svg viewBox="0 0 32 32" aria-hidden="true">${ICONS[iconKeyFor(p)]}</svg></button>
           <button class="qv-thumb alt" type="button" aria-label="View on mist" style="--tint-ink:${dept.ink}"><svg viewBox="0 0 32 32" aria-hidden="true">${ICONS[iconKeyFor(p)]}</svg></button>
           <button class="qv-thumb alt2" type="button" aria-label="View on graphite" style="--tint-ink:${dept.ink}"><svg viewBox="0 0 32 32" aria-hidden="true">${ICONS[iconKeyFor(p)]}</svg></button>
-        </div>
+        </div>`
+        }
       </div>
 
       <div>
